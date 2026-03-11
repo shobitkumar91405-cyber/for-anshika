@@ -14,253 +14,308 @@
         body, html {
             margin: 0; padding: 0;
             overflow: hidden;
-            background: #050505;
+            background: #0a0a0a;
             font-family: 'Playfair Display', serif;
-            color: white;
+            touch-action: manipulation; /* Prevents double-tap zoom lag */
         }
         
         .romantic-font { font-family: 'Dancing Script', cursive; }
         
         .section {
-            position: absolute;
-            inset: 0;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            padding: 20px;
-            background: radial-gradient(circle at center, #1a0a0a 0%, #050505 100%);
+            position: absolute; inset: 0;
+            display: none; opacity: 0;
+            align-items: center; justify-content: center; flex-direction: column;
+            padding: 20px; width: 100vw; height: 100vh;
         }
 
-        .section.active { display: flex; z-index: 10; }
+        .section.active { display: flex; opacity: 1; }
 
         .glass {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
         
-        .glowing-text {
-            text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493;
+        .glowing-text { text-shadow: 0 0 15px #ff69b4, 0 0 30px #ff1493; }
+
+        /* Smooth CSS Background Particles (Lag Free) */
+        .bg-particles { position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+        .particle {
+            position: absolute; top: -10%; color: #ff69b4; font-size: 20px;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
-        .insta-tag {
-            position: fixed;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        /* Wish Cards Styling */
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            width: 100%;
-            max-width: 400px;
-        }
+        /* Wish Cards */
         .wish-card {
-            height: 150px;
-            perspective: 1000px;
+            transition: transform 0.3s;
             cursor: pointer;
         }
-        .card-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-        .card-inner.flipped { transform: rotateY(180deg); }
-        .card-front, .card-back {
+        .wish-card:hover, .wish-card:active { transform: scale(1.05); }
+
+        /* Balloons */
+        .balloon {
+            width: 70px; height: 90px;
+            background: radial-gradient(circle at 30% 30%, #ff9a9e, #fecfef);
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
             position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            text-align: center;
+            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1), 0 5px 15px rgba(255,105,180,0.4);
+            cursor: pointer;
+            animation: float 4s ease-in-out infinite alternate;
         }
-        .card-back { transform: rotateY(180deg); background: rgba(255, 105, 180, 0.2); }
+        .balloon::after {
+            content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+            width: 2px; height: 30px; background: rgba(255,255,255,0.5);
+        }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(-5deg); }
+            100% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        .pop-text-anim { animation: fadeUp 1s ease-out forwards; }
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(20px) scale(0.8); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
 
-        #video-container {
-            width: 100%;
-            max-width: 600px;
-            border-radius: 15px;
-            overflow: hidden;
-            display: none;
-        }
-
-        .next-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 100;
-            background: rgba(255,255,255,0.1);
-            padding: 15px;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
+        .cake-container { touch-action: none; filter: drop-shadow(0 15px 30px rgba(236,72,153,0.4)); }
     </style>
 </head>
 <body>
 
-    <div class="insta-tag">made by <span class="text-pink-500">sivasingh</span> insta - <b>@smss1708</b></div>
+    <div class="fixed top-4 left-0 w-full text-center z-[100] text-white/70 text-sm font-mono tracking-widest pointer-events-none">
+        made by sivasingh instagram📷 - @smss1708
+    </div>
 
     <audio id="bgmusic" loop><source src="tere-liye.mp3" type="audio/mpeg"></audio>
 
-    <section id="intro" class="section active">
-        <div class="text-center">
-            <h1 class="text-6xl md:text-8xl font-bold romantic-font glowing-text mb-4">Hi Manisha 💕</h1>
-            <p class="text-2xl text-pink-300 romantic-font mb-10">You're the most special girl in the world.</p>
-            <button onclick="startApp()" class="bg-gradient-to-r from-pink-500 to-rose-500 px-10 py-4 rounded-full text-xl font-bold hover:scale-105 transition active:scale-95">
-                Open Your Surprise 💖
+    <div class="bg-particles" id="particles-container"></div>
+
+    <section id="intro" class="section active" style="z-index: 10;">
+        <div class="text-center z-20">
+            <h1 class="text-7xl md:text-8xl font-bold romantic-font glowing-text mb-4">Hey Manisha 💕</h1>
+            <p class="text-3xl text-pink-300 romantic-font mb-12">I have a special surprise for you.</p>
+            <button onclick="startExperience()" class="bg-gradient-to-r from-pink-500 to-rose-500 px-10 py-4 rounded-full text-xl font-bold hover:scale-110 transition shadow-lg shadow-pink-500/50 text-white">
+                Start Surprise 💖
             </button>
         </div>
     </section>
 
-    <section id="cake" class="section">
-        <h2 class="text-4xl romantic-font text-pink-300 mb-10">Manisha, Make a Wish & Cut! 🎂</h2>
-        <div class="relative w-[280px] h-[200px]" onclick="cutCake()">
-            <div class="absolute bottom-0 w-full h-24 bg-pink-600 rounded-t-3xl"></div>
-            <div class="absolute bottom-12 left-1/2 -translate-x-1/2 w-48 h-20 bg-pink-400 rounded-t-2xl"></div>
-            <div id="candle" class="absolute top-0 left-1/2 -translate-x-1/2 text-4xl animate-bounce">🕯️</div>
+    <section id="wishes" class="section" style="z-index: 10;">
+        <h2 class="text-5xl romantic-font text-pink-300 mb-8 text-center">Open My Wishes 💌</h2>
+        <div class="grid grid-cols-2 gap-6 z-20 w-full max-w-md px-4">
+            <div class="wish-card glass p-8 rounded-2xl text-center flex items-center justify-center flex-col" onclick="openWish('You are the most beautiful person inside and out. Always keep smiling, Manisha! 🌸')">
+                <i class="fa-solid fa-heart text-4xl text-pink-500 mb-2"></i>
+                <p class="text-white font-bold">Wish 1</p>
+            </div>
+            <div class="wish-card glass p-8 rounded-2xl text-center flex items-center justify-center flex-col" onclick="openWish('May all your dreams come true this year. You deserve all the happiness in the world! ✨')">
+                <i class="fa-solid fa-star text-4xl text-yellow-400 mb-2"></i>
+                <p class="text-white font-bold">Wish 2</p>
+            </div>
+            <div class="wish-card glass p-8 rounded-2xl text-center flex items-center justify-center flex-col" onclick="openWish('No matter where life takes us, my support and care for you will never end. 💖')">
+                <i class="fa-solid fa-gift text-4xl text-rose-500 mb-2"></i>
+                <p class="text-white font-bold">Wish 3</p>
+            </div>
+            <div class="wish-card glass p-8 rounded-2xl text-center flex items-center justify-center flex-col" onclick="openWish('Happy Birthday Manisha! Let\'s make today unforgettable. I love you! 💕')">
+                <i class="fa-solid fa-cake-candles text-4xl text-orange-400 mb-2"></i>
+                <p class="text-white font-bold">Wish 4</p>
+            </div>
         </div>
-        <div id="cake-msg" class="hidden mt-10 text-center">
-            <h3 class="text-3xl romantic-font glowing-text">Happy Birthday, My Dear Manisha!</h3>
-            <button onclick="nextPage('cards')" class="mt-5 text-pink-400 border border-pink-400 px-6 py-2 rounded-full">Next ✨</button>
-        </div>
-    </section>
+        <button id="btn-after-wishes" onclick="nextPage('cake')" class="mt-10 bg-white/10 px-8 py-3 rounded-full glass text-white text-lg hidden">
+            Next Magic ✨
+        </button>
 
-    <section id="cards" class="section">
-        <h2 class="text-3xl romantic-font mb-8 text-pink-200">Tap to read my wishes for you...</h2>
-        <div class="card-grid">
-            <div class="wish-card" onclick="flipCard(this)">
-                <div class="card-inner glass">
-                    <div class="card-front text-4xl">💎</div>
-                    <div class="card-back romantic-font text-xl">May your life shine brighter than any diamond.</div>
-                </div>
-            </div>
-            <div class="wish-card" onclick="flipCard(this)">
-                <div class="card-inner glass">
-                    <div class="card-front text-4xl">🌸</div>
-                    <div class="card-back romantic-font text-xl">May you always bloom like a beautiful rose.</div>
-                </div>
-            </div>
-            <div class="wish-card" onclick="flipCard(this)">
-                <div class="card-inner glass">
-                    <div class="card-front text-4xl">🌙</div>
-                    <div class="card-back romantic-font text-xl">May your nights be peaceful and dreams come true.</div>
-                </div>
-            </div>
-            <div class="wish-card" onclick="flipCard(this)">
-                <div class="card-inner glass">
-                    <div class="card-front text-4xl">♾️</div>
-                    <div class="card-back romantic-font text-xl">My support for you is infinite, Manisha.</div>
-                </div>
-            </div>
-        </div>
-        <button onclick="nextPage('balloons')" class="next-btn"><i class="fa-solid fa-arrow-right"></i></button>
-    </section>
-
-    <section id="balloons" class="section">
-        <div id="balloon-container" class="absolute inset-0 overflow-hidden"></div>
-        <div class="z-20 text-center pointer-events-none">
-            <h1 class="text-5xl romantic-font glowing-text">Pop for a Message! 🎈</h1>
-        </div>
-        <div id="pop-message" class="hidden z-30 fixed inset-0 bg-black/80 flex items-center justify-center">
-            <div class="text-center p-10 glass mx-5">
-                <h1 class="text-5xl romantic-font text-pink-500 mb-4">Happy Birthday Manisha!</h1>
-                <p class="text-lg">You are pure magic! ✨</p>
-                <button onclick="nextPage('video-page')" class="mt-8 bg-pink-600 px-8 py-2 rounded-full">Final Surprise 🎁</button>
+        <div id="wish-modal" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50 px-6">
+            <div class="glass p-10 rounded-3xl text-center max-w-lg w-full relative">
+                <p id="wish-text" class="text-3xl romantic-font text-white leading-relaxed"></p>
+                <button onclick="closeWish()" class="mt-8 bg-pink-500 text-white px-8 py-2 rounded-full font-bold">Close ✖</button>
             </div>
         </div>
     </section>
 
-    <section id="video-page" class="section">
-        <h2 class="text-3xl romantic-font mb-6 text-pink-300">A Little Something For You... 🎬</h2>
-        <div id="video-container" class="block">
-            <video id="myVideo" class="w-full" controls>
-                <source src="video1.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
+    <section id="cake" class="section" style="z-index: 10;">
+        <div class="text-center mb-8 z-20 pointer-events-none">
+            <h2 class="text-5xl romantic-font text-pink-300">Cut your cake Manisha! 🎂</h2>
+            <p class="text-gray-400 mt-2">Drag the knife to cut</p>
         </div>
-        <p class="mt-6 text-xs opacity-50">made with ❤️ by sivasingh</p>
+        <div class="cake-container relative w-[300px] h-[250px] z-20" id="cake-wrapper">
+            <div class="relative w-full h-full pointer-events-none">
+                <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[260px] h-[70px] bg-pink-600 rounded-[50%]"></div>
+                <div class="absolute bottom-[50px] left-1/2 -translate-x-1/2 w-[200px] h-[60px] bg-pink-500 rounded-[50%]"></div>
+                <div class="absolute bottom-[100px] left-1/2 -translate-x-1/2 w-[140px] h-[50px] bg-rose-500 rounded-[50%]"></div>
+                <div class="absolute bottom-[140px] left-1/2 -translate-x-1/2 flex gap-4">
+                    <div class="w-3 h-10 bg-white rounded-full"></div>
+                    <div class="w-3 h-12 bg-white rounded-full"></div>
+                    <div class="w-3 h-10 bg-white rounded-full"></div>
+                </div>
+            </div>
+            <div id="knife" class="absolute top-0 left-1/2 text-6xl pointer-events-none" style="transform: rotate(-30deg); z-index: 30;">🔪</div>
+        </div>
+        <div id="cake-message" class="hidden text-center mt-8 z-20">
+            <h3 class="text-4xl romantic-font glowing-text">Happy Birthday Manisha!</h3>
+            <button onclick="nextPage('balloons')" class="mt-6 text-pink-400 border border-pink-400 px-8 py-3 rounded-full hover:bg-pink-400 hover:text-black transition">Play With Balloons 🎈</button>
+        </div>
+    </section>
+
+    <section id="balloons" class="section" style="z-index: 10;">
+        <div class="text-center z-20 mb-10 pointer-events-none">
+            <h1 class="text-5xl md:text-7xl romantic-font text-white mb-2">Pop The Balloons! 🎈</h1>
+            <p class="text-pink-200">Tap to pop them</p>
+        </div>
+        
+        <div id="balloon-container" class="relative w-full h-[60vh] max-w-lg z-20">
+            </div>
+
+        <button id="btn-after-balloons" onclick="goToVideo()" class="absolute bottom-10 bg-gradient-to-r from-pink-500 to-rose-500 px-10 py-4 rounded-full text-xl font-bold text-white shadow-lg hidden z-30">
+            See The Final Surprise 🎬
+        </button>
+    </section>
+
+    <section id="video-page" class="section bg-black p-0 m-0" style="z-index: 50;">
+        <video id="final-video" src="final-video.mp4" playsinline class="w-full h-full object-cover pointer-events-none"></video>
     </section>
 
     <script>
-        const bgMusic = document.getElementById('bgmusic');
-        const video = document.getElementById('myVideo');
+        let music = document.getElementById('bgmusic');
+        let wishesRead = 0;
+        let balloonsPopped = 0;
+        const totalBalloons = 6;
 
-        function startApp() {
-            bgMusic.play().catch(() => console.log("Music needs interaction"));
-            nextPage('cake');
+        // Start Experience & Play Music
+        function startExperience() {
+            music.volume = 0.5;
+            music.play().catch(() => { console.log("User interaction required for audio"); });
+            nextPage('wishes');
         }
 
-        function nextPage(id) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            const next = document.getElementById(id);
-            next.classList.add('active');
-            
-            if(id === 'balloons') createBalloons();
-            if(id === 'video-page') {
-                bgMusic.pause();
-                video.play();
+        // Navigation Logic
+        function nextPage(nextId) {
+            const current = document.querySelector('.section.active');
+            const next = document.getElementById(nextId);
+
+            gsap.to(current, { opacity: 0, duration: 0.4, onComplete: () => {
+                current.classList.remove('active');
+                next.classList.add('active');
+                gsap.fromTo(next, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.4 });
+                
+                if(nextId === 'cake') initCake();
+                if(nextId === 'balloons') initBalloons();
+            }});
+        }
+
+        // Wishes Logic
+        function openWish(text) {
+            document.getElementById('wish-text').innerText = text;
+            const modal = document.getElementById('wish-modal');
+            modal.style.display = 'flex';
+            gsap.fromTo(modal.children[0], {scale: 0.5, opacity: 0}, {scale: 1, opacity: 1, duration: 0.3});
+            wishesRead++;
+        }
+        function closeWish() {
+            document.getElementById('wish-modal').style.display = 'none';
+            if(wishesRead >= 1) { // Show next button after reading at least 1 wish
+                document.getElementById('btn-after-wishes').classList.remove('hidden');
             }
         }
 
         // Cake Logic
-        function cutCake() {
-            document.getElementById('candle').style.display = 'none';
-            document.getElementById('cake-msg').classList.remove('hidden');
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        let isCutting = false;
+        function initCake() {
+            const wrap = document.getElementById('cake-wrapper');
+            const knife = document.getElementById('knife');
+            let hasCut = false;
+            
+            const moveKnife = (e) => {
+                if(!isCutting || hasCut) return;
+                const rect = wrap.getBoundingClientRect();
+                const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+                const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+                knife.style.left = x + 'px';
+                knife.style.top = y + 'px';
+                
+                if(x > 80 && x < 220 && y > 80 && y < 180) {
+                    hasCut = true;
+                    isCutting = false;
+                    document.getElementById('cake-message').classList.remove('hidden');
+                    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                }
+            };
+
+            wrap.addEventListener('pointerdown', (e) => { isCutting = true; moveKnife(e); });
+            window.addEventListener('pointermove', moveKnife);
+            window.addEventListener('pointerup', () => isCutting = false);
         }
 
-        // Card Flip Logic
-        function flipCard(el) {
-            el.querySelector('.card-inner').classList.toggle('flipped');
-        }
-
-        // Balloon Logic
-        function createBalloons() {
+        // Balloons Logic (DOM Based - Lag Free)
+        function initBalloons() {
             const container = document.getElementById('balloon-container');
-            let popped = 0;
-            for(let i=0; i<15; i++) {
-                const b = document.createElement('div');
-                b.className = 'absolute text-5xl cursor-pointer select-none';
-                b.innerHTML = '🎈';
-                b.style.left = Math.random() * 90 + '%';
-                b.style.top = '100%';
-                container.appendChild(b);
-
-                gsap.to(b, {
-                    y: -window.innerHeight - 200,
-                    duration: 5 + Math.random() * 5,
-                    repeat: -1,
-                    delay: Math.random() * 5,
-                    onStart: () => {
-                        b.onclick = () => {
-                            popped++;
-                            b.innerHTML = '💥';
-                            confetti({ origin: { x: b.offsetLeft/window.innerWidth, y: b.offsetTop/window.innerHeight } });
-                            setTimeout(() => b.remove(), 200);
-                            if(popped >= 5) document.getElementById('pop-message').classList.remove('hidden');
-                        };
+            container.innerHTML = '';
+            balloonsPopped = 0;
+            const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#1dd1a1', '#f368e0'];
+            
+            for(let i=0; i<totalBalloons; i++) {
+                let b = document.createElement('div');
+                b.className = 'balloon';
+                b.style.background = `radial-gradient(circle at 30% 30%, #fff, ${colors[i]})`;
+                b.style.left = `${Math.random() * 80 + 10}%`;
+                b.style.top = `${Math.random() * 60 + 20}%`;
+                b.style.animationDelay = `${Math.random() * 2}s`;
+                
+                b.onclick = function(e) {
+                    // Confetti Pop
+                    confetti({ particleCount: 40, spread: 50, origin: { x: e.clientX/innerWidth, y: e.clientY/innerHeight } });
+                    
+                    // Hide Balloon
+                    b.style.display = 'none';
+                    
+                    // Show Text
+                    let text = document.createElement('div');
+                    text.innerHTML = "Happy Birthday Manisha 🩵";
+                    text.className = "absolute text-pink-300 romantic-font text-2xl font-bold pop-text-anim whitespace-nowrap text-center w-full";
+                    text.style.left = "0";
+                    text.style.top = b.style.top;
+                    container.appendChild(text);
+                    
+                    balloonsPopped++;
+                    if(balloonsPopped === totalBalloons) {
+                        document.getElementById('btn-after-balloons').classList.remove('hidden');
                     }
-                });
+                };
+                container.appendChild(b);
             }
         }
 
-        // Video & Audio Sync
-        video.onplay = () => bgMusic.pause();
-        video.onended = () => bgMusic.play();
+        // Video Logic
+        function goToVideo() {
+            // Stop background music
+            music.pause();
+            
+            const current = document.querySelector('.section.active');
+            const videoSec = document.getElementById('video-page');
+            const video = document.getElementById('final-video');
+
+            gsap.to(current, { opacity: 0, duration: 0.5, onComplete: () => {
+                current.classList.remove('active');
+                videoSec.classList.add('active');
+                video.play();
+            }});
+        }
+
+        // Lag-Free Background Particles Generator
+        const pContainer = document.getElementById('particles-container');
+        for(let i=0; i<25; i++) {
+            let p = document.createElement('div');
+            p.className = 'particle';
+            p.innerHTML = Math.random() > 0.5 ? '🌹' : '💕';
+            p.style.left = `${Math.random() * 100}vw`;
+            p.style.animationDuration = `${Math.random() * 3 + 4}s`; // 4 to 7 seconds fall
+            p.style.animationDelay = `${Math.random() * 5}s`;
+            p.style.fontSize = `${Math.random() * 15 + 10}px`;
+            pContainer.appendChild(p);
+        }
     </script>
 </body>
 </html>
