@@ -3,169 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Someone Special ✨</title>
+    <title>For You, Cutee ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* CSS STYLES */
+        :root {
+            --pink-glow: #ff85a1;
+            --soft-pink: #ffe4e9;
+            --white-glass: rgba(255, 255, 255, 0.8);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: #0a0118; color: white; overflow: hidden; height: 100vh; display: flex; justify-content: center; align-items: center; }
         
-        #credit { position: absolute; top: 15px; width: 100%; text-align: center; z-index: 1000; font-size: 14px; color: #ff75c3; font-weight: bold; letter-spacing: 1px; }
-        
-        .container { width: 90%; max-width: 400px; height: 85vh; position: relative; }
-        .page { position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; opacity: 0; visibility: hidden; transition: 0.8s; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border-radius: 25px; padding: 25px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .page.active { opacity: 1; visibility: visible; }
+        body { 
+            background: #fffafa; 
+            color: #444; 
+            overflow: hidden; 
+            height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
 
-        .title { font-size: 2.2rem; margin-bottom: 15px; background: linear-gradient(to right, #ff75c3, #ffa647); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700; }
-        .img-box img { width: 140px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 0 20px #ff008066; }
-        
-        input { padding: 12px; border-radius: 12px; border: none; width: 85%; margin-bottom: 20px; background: rgba(255, 255, 255, 0.1); color: white; text-align: center; outline: none; border: 1px solid #ff0080; }
-        button { padding: 12px 28px; border-radius: 30px; border: none; background: linear-gradient(45deg, #ff0080, #7928ca); color: white; font-weight: 600; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        button:active { transform: scale(0.9); }
+        /* Animated Background Petals */
+        .petals-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+        .petal { position: absolute; background: var(--soft-pink); border-radius: 150% 0 150% 0; animation: drift 10s infinite linear; opacity: 0.6; }
+        @keyframes drift {
+            0% { transform: translateY(-10%) rotate(0deg); left: var(--start-x); }
+            100% { transform: translateY(110vh) rotate(360deg); left: var(--end-x); }
+        }
 
-        /* Love Meter */
-        .meter { width: 180px; height: 90px; border: 4px solid #ff0080; border-bottom: none; border-top-left-radius: 90px; border-top-right-radius: 90px; position: relative; margin-bottom: 20px; }
-        .pointer { width: 4px; height: 75px; background: #fff; position: absolute; bottom: 0; left: 50%; transform-origin: bottom; transform: rotate(-90deg); transition: 2s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+        #credit { 
+            position: absolute; top: 20px; width: 100%; text-align: center; z-index: 100; 
+            font-size: 14px; color: #ff85a1; font-weight: 600; letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(255, 133, 161, 0.3);
+        }
 
-        /* Emoji Grid */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .item { font-size: 2.5rem; cursor: pointer; transition: 0.3s; }
-        .item:hover { transform: scale(1.2); }
+        .container { width: 90%; max-width: 420px; height: 80vh; position: relative; z-index: 10; }
+
+        /* Page Transitions */
+        .page {
+            position: absolute; width: 100%; height: 100%;
+            background: var(--white-glass);
+            backdrop-filter: blur(15px);
+            border-radius: 40px;
+            padding: 40px 30px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center;
+            border: 2px solid #fff;
+            box-shadow: 0 20px 50px rgba(255, 133, 161, 0.15);
+            opacity: 0; visibility: hidden;
+            transform: translateY(30px) scale(0.95);
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .page.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+
+        /* Glowing Text */
+        .glowing-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.8rem;
+            color: #ff4d6d;
+            text-shadow: 0 0 15px rgba(255, 77, 109, 0.4);
+            margin-bottom: 20px;
+        }
+
+        .img-frame {
+            width: 180px; height: 180px;
+            border-radius: 50%;
+            padding: 8px;
+            background: linear-gradient(45deg, #fff, var(--soft-pink));
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            animation: pulse 3s infinite ease-in-out;
+        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .img-frame img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+
+        button {
+            padding: 16px 40px; border-radius: 50px; border: none;
+            background: #fff; color: #ff4d6d;
+            font-weight: 600; font-size: 16px;
+            box-shadow: 0 10px 20px rgba(255, 77, 109, 0.2);
+            cursor: pointer; transition: 0.3s;
+            border: 1px solid var(--soft-pink);
+            margin-top: 20px;
+        }
+        button:hover { background: #ff4d6d; color: #fff; transform: translateY(-3px); }
 
         /* Polaroid Gallery */
-        .gallery { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-        .p-card { width: 100px; background: white; padding: 5px 5px 15px; transform: rotate(-3deg); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .p-card img { width: 100%; height: 100px; object-fit: cover; }
-        
-        /* Message Popup */
-        .popup { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
-        .p-content { background: #1a052e; padding: 30px; border-radius: 20px; border: 1px solid #ff0080; text-align: center; }
-        
-        .no-btn { position: absolute; transition: 0.2s; }
+        .stack { position: relative; width: 100%; height: 250px; margin-bottom: 40px; }
+        .polaroid {
+            width: 140px; background: #fff; padding: 10px 10px 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            position: absolute; transition: 0.5s;
+        }
+        .polaroid img { width: 100%; height: 130px; object-fit: cover; }
+
+        /* Meter */
+        .meter-wrap { width: 100%; height: 10px; background: #eee; border-radius: 10px; margin: 20px 0; overflow: hidden; }
+        .meter-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #ff85a1, #ff4d6d); transition: 3s ease-in-out; }
+
+        .no-btn { position: absolute; white-space: nowrap; transition: 0.1s; }
+        .popup { position: fixed; inset: 0; background: rgba(255,255,255,0.9); display: none; z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+        .pop-card { background: #fff; padding: 30px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); border: 1px solid var(--soft-pink); text-align: center; }
     </style>
 </head>
 <body>
 
     <div id="credit">Follow 💗 on insta - @smss1708</div>
+    <div class="petals-container" id="petals"></div>
     <audio id="bgMusic" src="tere-liye.mp3" loop></audio>
 
     <div class="container">
         <div class="page active" id="p1">
-            <h2 class="title">Before We Go Ahead...</h2>
-            <div class="img-box"><img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueXNidXJ4ZzR3eW14eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnFwPWc/MDJ9IbMvC7WFi/giphy.gif"></div>
-            <input type="text" id="nameInp" placeholder="Your Name... 💘">
-            <button onclick="start()">Reveal If You're My Person 💘</button>
+            <h1 class="glowing-text">Hey Cutee... ✨</h1>
+            <div class="img-frame"><img src="photo1.jpg"></div>
+            <p style="color: #888; margin-bottom: 10px;">I made something special for you.</p>
+            <button onclick="startApp()">Open My Heart 🎁</button>
         </div>
 
         <div class="page" id="p2">
-            <h2 class="title">Wait... ✨</h2>
-            <p id="welcomeMsg"></p>
-            <p>You are the only one who belongs here.</p>
-            <button onclick="go(3)">Continue Our Story ✨</button>
+            <h2 class="glowing-text">You are Rare.</h2>
+            <p>In a world full of trends, you are a classic masterpiece.</p>
+            <button onclick="next(3)">Next 🌸</button>
         </div>
 
         <div class="page" id="p3">
-            <h2 class="title">Love Test</h2>
-            <div class="meter"><div class="pointer" id="ptr"></div></div>
-            <p id="mText">Analyzing our connection...</p>
-            <button id="mBtn" style="display:none" onclick="go(4)">Continue ❤️</button>
+            <h2 class="glowing-text">Our Chemistry</h2>
+            <div class="meter-wrap"><div class="meter-bar" id="bar"></div></div>
+            <p id="mText">Matching our souls...</p>
+            <button id="mNext" style="display:none" onclick="next(4)">Continue ❤️</button>
         </div>
 
         <div class="page" id="p4">
-            <h2 class="title">My Promises</h2>
-            <p>Tap to discover my heart's promises 💖</p>
-            <div class="grid">
-                <span class="item" onclick="msg('I promise to be your peace when life feels too loud. 🌙')">🌙</span>
-                <span class="item" onclick="msg('I promise to hold you close on your hardest days. 🫂')">🫂</span>
-                <span class="item" onclick="msg('I promise to always choose you, every single day. 🔒')">🔒</span>
-                <span class="item" onclick="msg('I promise to make you smile whenever you feel low. 🌸')">🌸</span>
+            <h2 class="glowing-text">My Promises</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div onclick="pop('To be your safest place. 🏡')" style="font-size: 40px; cursor:pointer">🏡</div>
+                <div onclick="pop('To listen to your unspoken words. ☁️')" style="font-size: 40px; cursor:pointer">☁️</div>
+                <div onclick="pop('To love you louder on hard days. 📣')" style="font-size: 40px; cursor:pointer">📣</div>
+                <div onclick="pop('To never let go of your hand. 🤝')" style="font-size: 40px; cursor:pointer">🤝</div>
             </div>
-            <button onclick="go(8)" style="margin-top:30px">Go Further ✨</button>
+            <button onclick="next(5)" style="margin-top: 30px;">More... ➡️</button>
+        </div>
+
+        <div class="page" id="p5">
+            <h2 class="glowing-text">Why You?</h2>
+            <p>"Because you have a soul that makes mine feel alive."</p>
+            <div class="stack">
+                <div class="polaroid" style="top:0; left:10%; transform: rotate(-5deg)"><img src="photo2.jpg"></div>
+                <div class="polaroid" style="top:10px; right:10%; transform: rotate(5deg)"><img src="photo3.jpg"></div>
+            </div>
+            <button onclick="next(6)">Keep Scrolling ✨</button>
+        </div>
+
+        <div class="page" id="p6">
+            <h2 class="glowing-text">Aesthetic You</h2>
+            <div style="display:flex; gap:10px; overflow-x: auto; padding: 10px;">
+                <img src="photo4.jpg" style="width:120px; border-radius:20px;">
+                <img src="photo5.jpg" style="width:120px; border-radius:20px;">
+                <img src="photo6.jpg" style="width:120px; border-radius:20px;">
+            </div>
+            <button onclick="next(7)">Almost there... ➡️</button>
+        </div>
+
+        <div class="page" id="p7">
+            <h2 class="glowing-text">Pure Vibes</h2>
+            <p>Every moment with you is like a scene from a movie.</p>
+            <div class="img-frame" style="width: 140px; height: 140px;"><img src="photo7.jpg"></div>
+            <button onclick="next(8)">The Question 💌</button>
         </div>
 
         <div class="page" id="p8">
-            <h2 class="title">Why You? ✨</h2>
-            <p style="font-style: italic; margin-bottom: 10px;">"Because every little thing about you feels like home."</p>
-            <div class="gallery">
-                <div class="p-card"><img src="photo1.jpg"></div>
-                <div class="p-card" style="transform:rotate(4deg)"><img src="photo2.jpg"></div>
-            </div>
-            <button onclick="go(9)">More... ➡️</button>
+            <h2 class="glowing-text">I have to ask...</h2>
+            <p style="margin-bottom: 20px;">Will you be mine forever?</p>
+            <button onclick="next(9)">Yes, 1000 Times! 💖</button>
+            <button class="no-btn" id="no" onmouseover="moveNo()">No 🥺</button>
         </div>
 
         <div class="page" id="p9">
-            <h2 class="title">Our Memories</h2>
-            <div class="gallery">
-                <div class="p-card"><img src="photo3.jpg"></div>
-                <div class="p-card" style="transform:rotate(5deg)"><img src="photo4.jpg"></div>
-                <div class="p-card"><img src="photo5.jpg"></div>
+            <h1 class="glowing-text">I Love You! ♾️</h1>
+            <p>You're the dream I never want to wake up from.</p>
+            <div style="display:flex; gap:15px; margin-top:25px;">
+                <img src="photo8.jpg" style="width:70px; height:70px; border-radius:50%; border:2px solid #ff85a1;">
+                <img src="photo9.jpg" style="width:90px; height:90px; border-radius:50%; border:2px solid #ff85a1; transform: scale(1.1);">
+                <img src="photo10.jpg" style="width:70px; height:70px; border-radius:50%; border:2px solid #ff85a1;">
             </div>
-            <button onclick="go(10)">Almost There 💘</button>
-        </div>
-
-        <div class="page" id="p10">
-            <h2 class="title">Pure Bliss</h2>
-            <div class="gallery">
-                <img src="photo6.jpg" style="width:120px; border-radius:10px; margin:5px">
-                <img src="photo7.jpg" style="width:120px; border-radius:10px; margin:5px">
-            </div>
-            <p>Every moment with you is a gift.</p>
-            <button onclick="go(11)">Last Thing... 💌</button>
-        </div>
-
-        <div class="page" id="p11">
-            <h2 class="title">Question...</h2>
-            <p>Will you stay by my side forever?</p>
-            <div class="img-box"><img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNG01amR4Z3R3eW14eHh4eHh4eHh4eHh4eHh4eHh4eHh4JnFwPWc/c76IJLufpNUMo/giphy.gif"></div>
-            <button onclick="go(12)">Yes, Forever 💖</button>
-            <button class="no-btn" id="no" onmouseover="move()">No 🥺</button>
-        </div>
-
-        <div class="page" id="p12">
-            <h1 class="title">I Love You! ♾️</h1>
-            <p>You've made my world beautiful.</p>
-            <div class="gallery">
-                <img src="photo8.jpg" style="width:80px; border-radius:50%; border:2px solid #ff0080">
-                <img src="photo9.jpg" style="width:80px; border-radius:50%; border:2px solid #ff0080">
-                <img src="photo10.jpg" style="width:80px; border-radius:50%; border:2px solid #ff0080">
-            </div>
-            <p style="margin-top:20px; font-size:12px">End of our digital story (for now) ❤️</p>
         </div>
     </div>
 
-    <div class="popup" id="pop"><div class="p-content"><p id="pText"></p><button onclick="closePop()">Close 💗</button></div></div>
+    <div class="popup" id="pop"><div class="pop-card"><p id="pMsg"></p><button onclick="closePop()">Close</button></div></div>
 
     <script>
-        // JS LOGIC
-        function start() {
-            let n = document.getElementById('nameInp').value;
-            if(!n) return alert("Please enter your name 💖");
-            document.getElementById('welcomeMsg').innerText = "Hey " + n + ",";
+        // Create falling petals
+        function createPetals() {
+            const container = document.getElementById('petals');
+            for(let i=0; i<25; i++) {
+                const p = document.createElement('div');
+                p.className = 'petal';
+                p.style.width = Math.random() * 15 + 10 + 'px';
+                p.style.height = p.style.width;
+                p.style.setProperty('--start-x', Math.random() * 100 + 'vw');
+                p.style.setProperty('--end-x', Math.random() * 100 + 'vw');
+                p.style.animationDelay = Math.random() * 8 + 's';
+                p.style.animationDuration = Math.random() * 5 + 7 + 's';
+                container.appendChild(p);
+            }
+        }
+        createPetals();
+
+        function startApp() {
             document.getElementById('bgMusic').play();
-            go(2);
+            next(2);
         }
 
-        function go(id) {
+        function next(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('p'+id).classList.add('active');
             if(id === 3) {
                 setTimeout(() => {
-                    document.getElementById('ptr').style.transform = 'rotate(80deg)';
+                    document.getElementById('bar').style.width = '100%';
                     setTimeout(() => {
-                        document.getElementById('mText').innerText = "100% Perfect Match! ♾️";
-                        document.getElementById('mBtn').style.display = "inline-block";
-                    }, 2000);
+                        document.getElementById('mText').innerText = "Soulmates Found! ♾️";
+                        document.getElementById('mNext').style.display = "block";
+                    }, 3100);
                 }, 500);
             }
         }
 
-        function msg(t) {
-            document.getElementById('pText').innerText = t;
+        function pop(t) {
+            document.getElementById('pMsg').innerText = t;
             document.getElementById('pop').style.display = 'flex';
         }
-
         function closePop() { document.getElementById('pop').style.display = 'none'; }
 
-        function move() {
+        function moveNo() {
             const b = document.getElementById('no');
             b.style.left = Math.random() * 70 + "%";
             b.style.top = Math.random() * 70 + "%";
